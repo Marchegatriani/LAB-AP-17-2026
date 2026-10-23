@@ -1,0 +1,59 @@
+ALFABET = "abcdefghijklmnopqrstuvwxyz"
+
+
+def cek_kata(teks, kata):
+    """List semua indeks kemunculan kata (tidak peka huruf besar/kecil)."""
+    if kata == "":
+        return []
+    teks_kecil = teks.lower()
+    kata_kecil = kata.lower()
+    hasil = []
+    start = 0
+    while True:
+        i = teks_kecil.find(kata_kecil, start)
+        if i == -1:
+            break
+        hasil.append(i)
+        start = i + 1
+    return hasil
+
+
+def cek_batas_kata(teks, i, panjang):
+    """True jika karakter sebelum & sesudah kata bukan huruf (tanpa isalpha)."""
+    if i > 0 and teks[i - 1].lower() in ALFABET:
+        return False
+    akhir = i + panjang
+    if akhir < len(teks) and teks[akhir].lower() in ALFABET:
+        return False
+    return True
+
+
+def sensor_kata(teks, kata, simbol):
+    """Return (teks_tersensor, jumlah_tersensor, list_indeks_awal)."""
+    simbol = simbol[:1] if simbol else "*"
+    panjang = len(kata)
+
+    indeks_awal = []
+    for i in cek_kata(teks, kata):
+        if cek_batas_kata(teks, i, panjang):
+            indeks_awal.append(i)
+
+    hasil = ""
+    pos = 0
+    for i in indeks_awal:
+        if i < pos:
+            continue
+        hasil += teks[pos:i] + simbol * panjang
+        pos = i + panjang
+    hasil += teks[pos:]
+
+    return (hasil, len(indeks_awal), indeks_awal)
+
+
+if __name__ == "__main__":
+    teks = input("Masukkan Teks: ")
+    kata = input("Masukkan kata target: ")
+    simbol = input("Masukkan simbol: ")
+    hasil, jumlah, indeks = sensor_kata(teks, kata, simbol)
+    print("Hasil Teks:", hasil)
+    print("Jumlah:", jumlah, "| Indeks:", indeks)
