@@ -1,0 +1,17 @@
+def hitung_mundur(n):
+    print(n)
+    if n == 0:
+        print("Luncurkan!")
+        return
+    hitung_mundur(n - 1)
+
+
+def minta_angka():
+    n = int(input("Masukkan angka awal hitung mundur: "))
+    if n < 0:
+        print("Input tidak valid, angka tidak boleh negatif.")
+        return minta_angka()
+    return n
+
+
+hitung_mundur(minta_angka())
